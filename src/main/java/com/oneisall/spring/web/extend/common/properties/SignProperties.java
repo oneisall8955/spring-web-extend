@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.annotation.PostConstruct;
@@ -44,7 +43,6 @@ public class SignProperties {
     /** 签名密钥 */
     private List<SignSetting> signedList;
 
-    @Value("${sign-config.paths}")
     private List<String> paths;
 
     @PostConstruct
