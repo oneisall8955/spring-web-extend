@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 public enum ExceptionEnum implements MessageException {
 
     // system error
-    SYSTEM_ERROR(500, "system error"),
+    SYSTEM_ERROR(500, "system error."),
 
     /** 签名校验失败 */
     SIGN_VERIFY_FAILED(10001, "Signature verification failed."),
