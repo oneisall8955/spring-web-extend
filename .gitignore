@@ -1,0 +1,46 @@
+logs
+applogs/
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.DS_Store
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+/logs/
+/applogs
+
+### VS Code ###
+.vscode/
+
+application.yml
+application-dev.yml
+application-test.yml
+bootstrap.yml
+bootstrap-dev.yml
+bootstrap-test.yml
+bootstrap-prod.yml
+application.properties
