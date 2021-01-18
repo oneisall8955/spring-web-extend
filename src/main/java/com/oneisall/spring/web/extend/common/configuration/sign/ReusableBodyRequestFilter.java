@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
+ * 可重复使用request body的过滤器
+ * <p>
+ * {@link ReusableBodyRequest}
+ *
  * @author liuzhicong
  **/
 @Slf4j

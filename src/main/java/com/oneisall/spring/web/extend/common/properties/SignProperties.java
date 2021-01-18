@@ -44,7 +44,7 @@ public class SignProperties {
     /** 签名密钥 */
     private List<SignSetting> signedList;
 
-    @Value("${sign-config.paths:/sign/verifyPost}")
+    @Value("${sign-config.paths}")
     private List<String> paths;
 
     @PostConstruct
@@ -64,7 +64,7 @@ public class SignProperties {
                     )
             );
         }
-        log.info("重新刷新的redis锁定时间配置为：{}", JsonUtils.objectToJson(CACHE));
+        log.info("重新刷新的签名密钥配置为：{}", JsonUtils.objectToJson(CACHE));
     }
 
     public static SignSetting findUniqueName(String key) {

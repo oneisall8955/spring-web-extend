@@ -1,25 +1,17 @@
 package com.oneisall.spring.web.extend.common.configuration;
 
-import com.oneisall.spring.web.extend.common.configuration.sign.ReusableBodyRequest;
 import com.oneisall.spring.web.extend.common.configuration.sign.ReusableBodyRequestFilter;
 import com.oneisall.spring.web.extend.common.configuration.sign.SignInterceptor;
-import com.oneisall.spring.web.extend.common.configuration.sign.SignRequired;
 import com.oneisall.spring.web.extend.common.properties.SignProperties;
 import com.oneisall.spring.web.extend.common.utils.CollectionMapUtil;
-import com.oneisall.spring.web.extend.common.utils.SpringContextUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
