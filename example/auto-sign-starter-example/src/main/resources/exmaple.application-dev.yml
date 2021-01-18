@@ -1,0 +1,8 @@
+sign-config:
+  signed-list:
+    - unique-name: foo-app
+      signed-secret: tklksgiok
+  paths:
+    - /sign/verifyPostUsingProperties
+    - /sign/verifyGetUsingProperties
+    - /aaa/bbb

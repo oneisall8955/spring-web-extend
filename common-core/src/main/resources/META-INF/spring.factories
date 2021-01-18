@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.oneisall.spring.web.extend.exception.DefaultExceptionAdvice,\
+com.oneisall.spring.web.extend.utils.SpringContextUtil
