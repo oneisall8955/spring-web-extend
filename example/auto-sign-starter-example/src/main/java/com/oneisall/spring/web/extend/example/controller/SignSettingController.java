@@ -1,6 +1,8 @@
 package com.oneisall.spring.web.extend.example.controller;
 
 import com.oneisall.spring.web.extend.sign.annotation.SignRequired;
+import com.oneisall.spring.web.extend.sign.handler.AbstractSignHandler;
+import com.oneisall.spring.web.extend.sign.handler.SignHandlerFactory;
 import com.oneisall.spring.web.extend.sign.properties.SignProperties;
 import com.oneisall.spring.web.extend.utils.CollectionMapUtil;
 import com.oneisall.spring.web.extend.utils.HmacUtil;
@@ -10,9 +12,11 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,5 +84,14 @@ public class SignSettingController {
     public Object verifyGetUsingProperties(@ModelAttribute Foo foo, HttpServletRequest httpServletRequest) {
         log.info("httpServletRequest class:{}", httpServletRequest.getClass());
         return foo;
+    }
+
+    @Resource
+    private SignHandlerFactory signHandlerFactory;
+
+    @GetMapping("/getSignHandler")
+    public Object getSignHandler(){
+        List<AbstractSignHandler> instances = signHandlerFactory.getInstances();
+        return instances.size();
     }
 }
