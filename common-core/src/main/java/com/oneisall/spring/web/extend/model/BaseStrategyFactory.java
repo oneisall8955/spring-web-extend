@@ -1,6 +1,7 @@
 package com.oneisall.spring.web.extend.model;
 
 import com.google.common.collect.Lists;
+import com.oneisall.spring.web.extend.utils.CopyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -26,6 +27,13 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
 
     protected String factoryName;
 
+    private Class<S> actualClass;
+
+    /** 是否生成新的对象 */
+    public boolean instanceNew() {
+        return false;
+    }
+
     public BaseStrategyFactory() {
         StrategyFactoryInfo factoryInfo = this.getClass().getAnnotation(StrategyFactoryInfo.class);
         factoryName = Optional.ofNullable(factoryInfo).map(item -> StringUtils.defaultString(item.value(), item.name())).orElse("ANONYMOUS");
@@ -34,6 +42,9 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
     public Optional<S> getInstance(T t) {
         for (S strategy : STRATEGIES) {
             if (strategy.match(t)) {
+                if (instanceNew()) {
+                    return Optional.of(CopyUtils.copyObject(strategy));
+                }
                 return Optional.of(strategy);
             }
         }
@@ -45,13 +56,21 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
         List<S> instances = new LinkedList<>();
         for (S strategy : STRATEGIES) {
             if (strategy.match(t)) {
-                instances.add(strategy);
+                instances.add(CopyUtils.copyObject(strategy));
             }
         }
         return instances;
     }
 
     public List<S> getInstances() {
+        if (instanceNew()) {
+            ArrayList<S> result = Lists.newArrayListWithCapacity(STRATEGIES.size());
+            for (S strategy : STRATEGIES) {
+                S copyObject = CopyUtils.copyObject(strategy);
+                result.add(copyObject);
+            }
+            return result;
+        }
         return Lists.newArrayList(STRATEGIES);
     }
 
@@ -65,8 +84,8 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
     public void init() {
         log.debug("【{}】工厂PostConstruct", factoryName);
         ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
-        Class<S> sClass = (Class<S>) parameterizedType.getActualTypeArguments()[0];
-        Map<String, S> beans = applicationContext.getBeansOfType(sClass);
+        actualClass = (Class<S>) parameterizedType.getActualTypeArguments()[0];
+        Map<String, S> beans = applicationContext.getBeansOfType(actualClass);
         STRATEGIES = Lists.newArrayListWithCapacity(beans.size());
         STRATEGIES.addAll(beans.values());
         STRATEGIES.sort(Comparator.comparingInt(S::order).reversed());

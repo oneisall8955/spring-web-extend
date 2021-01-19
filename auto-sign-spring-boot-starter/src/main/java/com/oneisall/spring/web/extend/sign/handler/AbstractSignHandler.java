@@ -11,9 +11,4 @@ public abstract class AbstractSignHandler implements StrategyMatcher<RequestSign
 
     /** 验签 */
     public abstract boolean verify(RequestSignInfo requestSignInfo);
-
-    @Override
-    public int order() {
-        return 0;
-    }
 }

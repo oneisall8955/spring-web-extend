@@ -11,5 +11,7 @@ public interface StrategyMatcher<T> {
     boolean match(T t);
 
     /** 排序,越大排在越前面 */
-    int order();
+    default int order() {
+        return 0;
+    }
 }
