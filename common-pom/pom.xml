@@ -3,11 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.onsisall</groupId>
+    <groupId>com.onsisall.springwebextend</groupId>
     <artifactId>common-pom</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0.SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>common-pom</name>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,12 +23,13 @@
         <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
         <commons-io.version>2.6</commons-io.version>
         <common-text.version>1.9</common-text.version>
+        <commons-collections.version>3.2.1</commons-collections.version>
+        <lombok.version>1.18.12</lombok.version>
     </properties>
 
     <!--管理所有第三方jar包版本，SpringCloud Alibaba 版本由主Pom控制-->
     <dependencyManagement>
         <dependencies>
-
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
@@ -57,9 +58,15 @@
             </dependency>
 
             <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.commons</groupId>
-                <artifactId>commons-configuration2</artifactId>
-                <version>${commons-configuration2.version}</version>
+                <artifactId>commons-text</artifactId>
+                <version>${common-text.version}</version>
             </dependency>
 
             <dependency>
@@ -68,42 +75,15 @@
                 <version>${swagger-annotations.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-text</artifactId>
-                <version>${common-text.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>swagger-bootstrap-ui</artifactId>
                 <version>${swagger-bootstrap-ui.version}</version>
             </dependency>
-
             <dependency>
-                <groupId>commons-net</groupId>
-                <artifactId>commons-net</artifactId>
-                <version>2.2</version>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <repositories>
-        <repository>
-            <id>dhgate-nexus</id>
-            <name>Nexus dhgate</name>
-            <url>http://10.211.220.120/repository/dhgate-public/</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>dhgate-nexus</id>
-            <name>dhgate-releases</name>
-            <url>http://10.211.220.120/repository/dhgate-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>dhgate-nexus</id>
-            <name>dhgate-snapshots</name>
-            <url>http://10.211.220.120/repository/dhgate-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>

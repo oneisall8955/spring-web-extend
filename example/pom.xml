@@ -4,16 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.onsisall</groupId>
-    <artifactId>spring-web-extend</artifactId>
+    <groupId>com.onsisall.springwebextend</groupId>
+    <artifactId>example-all</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <description>扩展spring-web</description>
-
+    <description>example all</description>
     <modules>
-        <module>common-pom</module>
-        <module>common-core</module>
-        <module>example</module>
-        <module>auto-sign-spring-boot-starter</module>
+        <module>auto-sign-starter-example</module>
     </modules>
 
 </project>

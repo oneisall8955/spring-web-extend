@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: auto-sign-starter-example
+  profiles:
+    active: dev
+
+logging:
+  level:
+   root: INFO
+   com.oneisall.spring.web.extend.sign: debug
