@@ -18,7 +18,7 @@ public class ReusableBodyRequest extends HttpServletRequestWrapper {
 
     private final String body;
 
-    public ReusableBodyRequest(HttpServletRequest request) throws IOException {
+    public ReusableBodyRequest(HttpServletRequest request) {
         super(request);
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader bufferedReader = null;

@@ -18,4 +18,8 @@ public abstract class AbstractSignHandler implements StrategyMatcher<RequestSign
      */
     public abstract Result<?> verify(RequestSignInfo requestSignInfo);
 
+    @Override
+    public String toString() {
+        return "{clazz:" + this.getClass().getName() + ",order:" + order() + "}";
+    }
 }

@@ -3,6 +3,7 @@ package com.oneisall.spring.web.extend.sign.configuration;
 import com.oneisall.spring.web.extend.sign.handler.SignHandlerFactory;
 import com.oneisall.spring.web.extend.sign.properties.SignProperties;
 import com.oneisall.spring.web.extend.utils.CollectionMapUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  **/
 @EnableConfigurationProperties({SignProperties.class})
 @Configuration
+@Slf4j
 public class WebConfigurer implements WebMvcConfigurer {
 
     @Resource
@@ -41,12 +43,13 @@ public class WebConfigurer implements WebMvcConfigurer {
         SignInterceptor signInterceptor = new SignInterceptor();
         signInterceptor.setSignHandlerFactory(signHandlerFactory);
         List<String> paths = CollectionMapUtil.null2empty(signProperties.getPaths());
+        log.info("验签过滤器的请求路径为：{}", paths);
         signInterceptor.setPaths(paths.stream().distinct().collect(Collectors.toList()));
         return signInterceptor;
     }
 
     @Bean
-    public FilterRegistrationBean<ReusableBodyRequestFilter> registerFilter() {
+    public FilterRegistrationBean<ReusableBodyRequestFilter> registerReusableBodyRequestFilter() {
         FilterRegistrationBean<ReusableBodyRequestFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new ReusableBodyRequestFilter());
         List<String> paths = signInterceptor().getPaths();

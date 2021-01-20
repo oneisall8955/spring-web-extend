@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
@@ -41,7 +43,9 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
 
     public BaseStrategyFactory() {
         StrategyFactoryInfo factoryInfo = this.getClass().getAnnotation(StrategyFactoryInfo.class);
-        factoryName = Optional.ofNullable(factoryInfo).map(item -> StringUtils.defaultString(item.value(), item.name())).orElse("ANONYMOUS");
+        factoryName = Optional.ofNullable(factoryInfo)
+                .map(item -> StringUtils.defaultString(item.value(), item.name()))
+                .orElse("ANONYMOUS:" + this.getClass());
     }
 
     public Optional<S> getInstance(T t) {
@@ -63,10 +67,13 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
         log.warn("【{}】工厂找不到指定的{}对应处理策略，尝试创建", factoryName, clazz);
         S newInstance;
         try {
-            newInstance = clazz.newInstance();
+            Constructor<? extends S> constructor = clazz.getConstructor();
+            newInstance = constructor.newInstance();
             strategies.add(newInstance);
+            strategies.sort(Comparator.comparingInt(S::order).reversed());
+            log.error("【{}】工厂创建{}实例成功", factoryName, clazz);
             return Optional.of(ofInstance(newInstance));
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             log.error("【{}】工厂找不到指定的{}对应处理策略，尝试创建失败", factoryName, clazz, e);
         }
         log.warn("【{}】工厂找不到指定的{}对应处理策略，并且创建失败，返回empty optional", factoryName, clazz);
@@ -115,4 +122,6 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
             log.info("处理策略:order:{},{}", strategy.order(), strategy);
         }
     }
+
+
 }

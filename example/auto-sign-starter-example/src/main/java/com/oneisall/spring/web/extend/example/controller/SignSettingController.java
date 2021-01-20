@@ -1,5 +1,7 @@
 package com.oneisall.spring.web.extend.example.controller;
 
+import com.oneisall.spring.web.extend.example.AfterAppendCustomSignHandler;
+import com.oneisall.spring.web.extend.example.CustomSignHandler;
 import com.oneisall.spring.web.extend.sign.annotation.SignRequired;
 import com.oneisall.spring.web.extend.sign.configuration.SignDataFrom;
 import com.oneisall.spring.web.extend.sign.configuration.SignKeyFrom;
@@ -15,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,7 +52,7 @@ public class SignSettingController {
             result.put("sign", hmac);
             result.put("json", json);
         } else {
-            HashMap<String, String> hashMap = CollectionMapUtil.initNewHashMap(data.size());
+            HashMap<String, String> hashMap = CollectionMapUtil.newLinkedHashMapWithExpectedSize(data.size());
             for (Map.Entry<String, Object> entry : data.entrySet()) {
                 Object value = entry.getValue();
                 if (value != null) {
@@ -66,25 +67,53 @@ public class SignSettingController {
         return result;
     }
 
-
+    /**
+     * 配置的路径不是签名的
+     */
     @PostMapping("/notVerify")
-    public Object notVerify(@RequestBody Foo foo, HttpServletRequest httpServletRequest) {
-        log.info("httpServletRequest class:{}", httpServletRequest.getClass());
+    public Object notVerify(@RequestBody Foo foo) {
         return foo;
     }
 
-    @SignRequired(title = "签名测试使用配置", usingProperties = true, uniqueName = "foo-app")
+    /**
+     * 配置的路径不是签名的
+     */
+    @PostMapping("/needVerityBotNoneAnnotation")
+    public Object needVerityBotNone(@RequestBody Foo foo) {
+        return foo;
+    }
+
+    /**
+     * 使用指定验签处理器
+     */
+    @PostMapping("/customSignHandler")
+    @SignRequired(title = "使用指定验签处理器",signKey = "oneisall-sign", usingVerifier = CustomSignHandler.class)
+    public Object customSignHandler(@RequestBody Foo foo) {
+        return foo;
+    }
+
+    /**
+     * 非容器管理的handler后期反射创建
+     */
+    @PostMapping("/afterAppendCustomSignHandler")
+    @SignRequired(title = "非容器管理的handler后期反射创建",signKey = "oneisall-sign", usingVerifier = AfterAppendCustomSignHandler.class)
+    public Object afterAppendCustomSignHandler(@RequestBody Foo foo) {
+        return foo;
+    }
+
+    /**
+     * 签名
+     */
+    @SignRequired(title = "签名测试使用配置：header_body", usingProperties = true, uniqueName = "foo-app")
     @PostMapping("/verifyPostUsingProperties")
-    public Object verifyPostUsingProperties(@RequestBody Foo foo, HttpServletRequest httpServletRequest) {
-        log.info("httpServletRequest class:{}", httpServletRequest.getClass());
+    public Object verifyPostUsingProperties(@RequestBody Foo foo) {
         return foo;
     }
 
     @SignRequired(title = "签名测试使用配置", usingProperties = true,
             uniqueName = "foo-app", signDataFrom = SignDataFrom.PARAM, signKeyFrom = SignKeyFrom.PARAM)
     @GetMapping("/verifyGetUsingProperties")
-    public Object verifyGetUsingProperties(@ModelAttribute Foo foo, HttpServletRequest httpServletRequest) {
-        log.info("httpServletRequest class:{}", httpServletRequest.getClass());
+    public Object verifyGetUsingProperties(@ModelAttribute Foo foo) {
         return foo;
     }
 
@@ -92,7 +121,7 @@ public class SignSettingController {
     private SignHandlerFactory signHandlerFactory;
 
     @GetMapping("/getSignHandler")
-    public Object getSignHandler(){
+    public Object getSignHandler() {
         List<AbstractSignHandler> instances = signHandlerFactory.getInstances();
         return instances.size();
     }

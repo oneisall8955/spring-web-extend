@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 签名处理器初始化
+ * 验签处理器初始化
  *
  * @author : oneisall
  * @version : v1 2021/1/20 01:11

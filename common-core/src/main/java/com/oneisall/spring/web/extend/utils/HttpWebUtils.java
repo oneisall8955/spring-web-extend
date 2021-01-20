@@ -64,7 +64,7 @@ public class HttpWebUtils {
 
     public static Map<String, String> parameters(HttpServletRequest request) {
         Map<String, String[]> parameterMap = request.getParameterMap();
-        Map<String, String> parametersData = CollectionMapUtil.initNewHashMap(parameterMap.size());
+        Map<String, String> parametersData = CollectionMapUtil.newLinkedHashMapWithExpectedSize(parameterMap.size());
         for (Map.Entry<String, String[]> parameterEntry : parameterMap.entrySet()) {
             String[] value = parameterEntry.getValue();
             if (value != null && value.length == 1) {

@@ -1,6 +1,7 @@
 package com.oneisall.spring.web.extend.sign.configuration;
 
 import com.oneisall.spring.web.extend.exception.BusinessException;
+import com.oneisall.spring.web.extend.exception.SystemExceptionEnum;
 import com.oneisall.spring.web.extend.model.Result;
 import com.oneisall.spring.web.extend.sign.annotation.SignRequired;
 import com.oneisall.spring.web.extend.sign.exception.SignExceptionEnum;
@@ -45,8 +46,9 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
         Method method = handlerMethod.getMethod();
         SignRequired signAnnotation = method.getAnnotation(SignRequired.class);
         if (signAnnotation == null) {
-            log.debug("不需要验签的接口：{}", method.getName());
-            return true;
+            // TODO 构造为可配置式
+            log.error("controller方法：{}，url：{}被配置文件指定了是需要验签的，但该方法没有设置SignRequired注解", method.getName(), request.getRequestURI());
+            throw new BusinessException(SystemExceptionEnum.SYSTEM_ERROR);
         }
 
         RequestSignInfo requestSignInfo = RequestSignInfo.of(request, signAnnotation);
@@ -59,11 +61,11 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
         }
         AbstractSignHandler signHandler = handlerOptional.orElseThrow(() ->
                 {
-                    log.error("【{}】：找不到处理的handler", requestSignInfo.getTitle());
+                    log.error("【{}】：找不到验签处理器handler", requestSignInfo.getTitle());
                     return new BusinessException(SignExceptionEnum.SIGN_VERIFY_FAILED);
                 }
         );
-
+        log.debug("【{}】使用验签处理器handler为：{}", signAnnotation.title(), signHandler);
         Result<?> verifyResult;
         try {
             verifyResult = signHandler.verify(requestSignInfo);
