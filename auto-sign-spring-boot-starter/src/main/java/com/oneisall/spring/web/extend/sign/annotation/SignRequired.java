@@ -1,5 +1,10 @@
 package com.oneisall.spring.web.extend.sign.annotation;
 
+import com.oneisall.spring.web.extend.sign.configuration.SignDataFrom;
+import com.oneisall.spring.web.extend.sign.configuration.SignKeyFrom;
+import com.oneisall.spring.web.extend.sign.configuration.SignMethod;
+import com.oneisall.spring.web.extend.sign.handler.AbstractSignHandler;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,22 +19,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SignRequired {
 
-    /** 请求参数从哪里获取 */
-    enum RequestSignFrom {
-        /** 请求头 */
-        HEADER,
-        /** get参数 */
-        PARAM
-    }
-
-    /** 请求参数从哪里获取 */
-    enum SignDataFrom {
-        /** body参数 */
-        BODY,
-        /** get参数 */
-        PARAM
-    }
-
     String title();
 
     /** 签名密钥 */
@@ -40,9 +29,19 @@ public @interface SignRequired {
 
     String uniqueName() default "";
 
-    RequestSignFrom requestSignFrom() default RequestSignFrom.HEADER;
+    String signKey() default "sign";
+
+    SignKeyFrom signKeyFrom() default SignKeyFrom.HEADER;
 
     SignDataFrom signDataFrom() default SignDataFrom.BODY;
 
-    String requestSignKey() default "sign";
+    SignMethod signMethod() default SignMethod.HMAC;
+
+    Class<? extends AbstractSignHandler> usingVerifier() default AbstractNone.class;
+
+    /** 仅仅包含的字段 */
+    String[] includes() default {};
+
+    abstract class AbstractNone extends AbstractSignHandler {
+    }
 }

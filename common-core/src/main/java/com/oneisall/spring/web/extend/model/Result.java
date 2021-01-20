@@ -1,6 +1,7 @@
 package com.oneisall.spring.web.extend.model;
 
-import com.oneisall.spring.web.extend.i18n.MessageException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.oneisall.spring.web.extend.i18n.CodeMessageEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ public class Result<T> implements Serializable {
     private int code;
     private T data;
     private String message;
+    @JsonIgnore
+    private CodeMessageEnum codeMessageEnum;
 
     public Result(boolean success, int code, T data, String message) {
         this.success = success;
@@ -47,7 +50,15 @@ public class Result<T> implements Serializable {
         return new Result<>(success, code, data, msg);
     }
 
-    public static <T> Result<T> failed(MessageException messageException) {
-        return of(false, null, messageException.getCode(), messageException.getMsg());
+    /** 指定异常枚举，可返回给前端 */
+    public static <T> Result<T> failed(CodeMessageEnum codeMessageEnum) {
+        Result<T> of = of(false, null, codeMessageEnum.getCode(), codeMessageEnum.getMsg());
+        of.codeMessageEnum = codeMessageEnum;
+        return of;
+    }
+
+    /** 指定日志，不设置异常枚举，不建议返回给前端 */
+    public static <T> Result<T> failedLog(CodeMessageEnum codeMessageEnum, String log) {
+        return of(false, null, codeMessageEnum.getCode(), log);
     }
 }

@@ -1,22 +1,18 @@
 package com.oneisall.spring.web.extend.exception;
 
+import com.oneisall.spring.web.extend.i18n.CodeMessageEnum;
 import com.oneisall.spring.web.extend.i18n.I18nMessage;
-import com.oneisall.spring.web.extend.i18n.MessageException;
 import lombok.AllArgsConstructor;
 
 /**
  * @author liuzhicong
  **/
 @AllArgsConstructor
-public enum SystemExceptionEnum implements MessageException {
+public enum SystemExceptionEnum implements CodeMessageEnum {
 
     // system error
-    SYSTEM_ERROR(500, "system error."),
-
-    /** 签名校验失败 */
-    SIGN_VERIFY_FAILED(10001, "Signature verification failed."),
-    /** 签名配置异常 */
-    SIGN_SYSTEM_ERROR(10002, "Signature verification failed(setting error)."),
+    SYSTEM_ERROR(500, "system error.(500)"),
+    READ_BODY_ERROR(501, "system error.(501)"),
     ;
 
     private final int code;

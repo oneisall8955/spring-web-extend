@@ -23,15 +23,20 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
 
     private ApplicationContext applicationContext;
 
-    protected List<S> STRATEGIES;
+    protected List<S> strategies;
 
     protected String factoryName;
 
-    private Class<S> actualClass;
-
     /** 是否生成新的对象 */
-    public boolean instanceNew() {
+    public boolean ofNew() {
         return false;
+    }
+
+    protected S ofInstance(S source) {
+        if (ofNew()) {
+            return CopyUtils.copyObject(source);
+        }
+        return source;
     }
 
     public BaseStrategyFactory() {
@@ -40,21 +45,37 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
     }
 
     public Optional<S> getInstance(T t) {
-        for (S strategy : STRATEGIES) {
+        for (S strategy : strategies) {
             if (strategy.match(t)) {
-                if (instanceNew()) {
-                    return Optional.of(CopyUtils.copyObject(strategy));
-                }
-                return Optional.of(strategy);
+                return Optional.of(ofInstance(strategy));
             }
         }
         log.info("【{}】工厂根据{}找不到对应处理策略", factoryName, t);
         return Optional.empty();
     }
 
+    public Optional<S> getInstance(Class<? extends S> clazz) {
+        for (S strategy : strategies) {
+            if (strategy.getClass() == clazz) {
+                return Optional.of(ofInstance(strategy));
+            }
+        }
+        log.warn("【{}】工厂找不到指定的{}对应处理策略，尝试创建", factoryName, clazz);
+        S newInstance;
+        try {
+            newInstance = clazz.newInstance();
+            strategies.add(newInstance);
+            return Optional.of(ofInstance(newInstance));
+        } catch (InstantiationException | IllegalAccessException e) {
+            log.error("【{}】工厂找不到指定的{}对应处理策略，尝试创建失败", factoryName, clazz, e);
+        }
+        log.warn("【{}】工厂找不到指定的{}对应处理策略，并且创建失败，返回empty optional", factoryName, clazz);
+        return Optional.empty();
+    }
+
     public List<S> getInstances(T t) {
         List<S> instances = new LinkedList<>();
-        for (S strategy : STRATEGIES) {
+        for (S strategy : strategies) {
             if (strategy.match(t)) {
                 instances.add(CopyUtils.copyObject(strategy));
             }
@@ -63,15 +84,15 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
     }
 
     public List<S> getInstances() {
-        if (instanceNew()) {
-            ArrayList<S> result = Lists.newArrayListWithCapacity(STRATEGIES.size());
-            for (S strategy : STRATEGIES) {
+        if (ofNew()) {
+            ArrayList<S> result = Lists.newArrayListWithCapacity(strategies.size());
+            for (S strategy : strategies) {
                 S copyObject = CopyUtils.copyObject(strategy);
                 result.add(copyObject);
             }
             return result;
         }
-        return Lists.newArrayList(STRATEGIES);
+        return Lists.newArrayList(strategies);
     }
 
     @Override
@@ -84,13 +105,13 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
     public void init() {
         log.debug("【{}】工厂PostConstruct", factoryName);
         ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
-        actualClass = (Class<S>) parameterizedType.getActualTypeArguments()[0];
+        Class<S> actualClass = (Class<S>) parameterizedType.getActualTypeArguments()[0];
         Map<String, S> beans = applicationContext.getBeansOfType(actualClass);
-        STRATEGIES = Lists.newArrayListWithCapacity(beans.size());
-        STRATEGIES.addAll(beans.values());
-        STRATEGIES.sort(Comparator.comparingInt(S::order).reversed());
-        log.info("【{}】工厂根据找到{}对应处理策略", factoryName, STRATEGIES.size());
-        for (S strategy : STRATEGIES) {
+        strategies = Lists.newCopyOnWriteArrayList();
+        strategies.addAll(beans.values());
+        strategies.sort(Comparator.comparingInt(S::order).reversed());
+        log.info("【{}】工厂根据找到{}对应处理策略", factoryName, strategies.size());
+        for (S strategy : strategies) {
             log.info("处理策略:order:{},{}", strategy.order(), strategy);
         }
     }

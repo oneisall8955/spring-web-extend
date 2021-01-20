@@ -1,6 +1,6 @@
 package com.oneisall.spring.web.extend.exception;
 
-import com.oneisall.spring.web.extend.i18n.MessageException;
+import com.oneisall.spring.web.extend.i18n.CodeMessageEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,12 +14,12 @@ import lombok.Setter;
 public class BusinessException extends RuntimeException {
     private Integer code;
     private String msg;
-    private MessageException messageException;
+    private CodeMessageEnum codeMessageEnum;
 
-    public BusinessException(MessageException messageException) {
-        super(messageException.getMsg());
-        this.code = messageException.getCode();
-        this.msg = messageException.getMsg();
-        this.messageException = messageException;
+    public BusinessException(CodeMessageEnum codeMessageEnum) {
+        super(codeMessageEnum.getMsg());
+        this.code = codeMessageEnum.getCode();
+        this.msg = codeMessageEnum.getMsg();
+        this.codeMessageEnum = codeMessageEnum;
     }
 }

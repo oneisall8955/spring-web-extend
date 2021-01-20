@@ -1,6 +1,8 @@
 package com.oneisall.spring.web.extend.example.controller;
 
 import com.oneisall.spring.web.extend.sign.annotation.SignRequired;
+import com.oneisall.spring.web.extend.sign.configuration.SignDataFrom;
+import com.oneisall.spring.web.extend.sign.configuration.SignKeyFrom;
 import com.oneisall.spring.web.extend.sign.handler.AbstractSignHandler;
 import com.oneisall.spring.web.extend.sign.handler.SignHandlerFactory;
 import com.oneisall.spring.web.extend.sign.properties.SignProperties;
@@ -38,12 +40,12 @@ public class SignSettingController {
 
     @PostMapping("/generateSign/{from}/{uniqueName}")
     public Object generateSign(@RequestBody Map<String, Object> data,
-                               @PathVariable SignRequired.SignDataFrom from,
+                               @PathVariable SignDataFrom from,
                                @PathVariable String uniqueName) {
         SignProperties.SignSetting signSetting = SignProperties.findUniqueName(uniqueName);
         String signedSecret = signSetting.getSignedSecret();
         Map<String, Object> result = new LinkedHashMap<>();
-        if (from == SignRequired.SignDataFrom.BODY) {
+        if (from == SignDataFrom.BODY) {
             String json = JsonUtils.objectToJson(data);
             String hmac = HmacUtil.generateHmac(json, signedSecret);
             result.put("sign", hmac);
@@ -79,7 +81,7 @@ public class SignSettingController {
     }
 
     @SignRequired(title = "签名测试使用配置", usingProperties = true,
-            uniqueName = "foo-app", signDataFrom = SignRequired.SignDataFrom.PARAM, requestSignFrom = SignRequired.RequestSignFrom.PARAM)
+            uniqueName = "foo-app", signDataFrom = SignDataFrom.PARAM, signKeyFrom = SignKeyFrom.PARAM)
     @GetMapping("/verifyGetUsingProperties")
     public Object verifyGetUsingProperties(@ModelAttribute Foo foo, HttpServletRequest httpServletRequest) {
         log.info("httpServletRequest class:{}", httpServletRequest.getClass());

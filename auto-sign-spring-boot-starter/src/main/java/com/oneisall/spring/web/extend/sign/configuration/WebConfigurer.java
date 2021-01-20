@@ -1,5 +1,6 @@
 package com.oneisall.spring.web.extend.sign.configuration;
 
+import com.oneisall.spring.web.extend.sign.handler.SignHandlerFactory;
 import com.oneisall.spring.web.extend.sign.properties.SignProperties;
 import com.oneisall.spring.web.extend.utils.CollectionMapUtil;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,6 +24,9 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Resource
     private SignProperties signProperties;
 
+    @Resource
+    private SignHandlerFactory signHandlerFactory;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // TODO 根据注解获取path从而不用配置 https://my.oschina.net/u/557580/blog/534699
@@ -35,6 +39,7 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Bean
     public SignInterceptor signInterceptor() {
         SignInterceptor signInterceptor = new SignInterceptor();
+        signInterceptor.setSignHandlerFactory(signHandlerFactory);
         List<String> paths = CollectionMapUtil.null2empty(signProperties.getPaths());
         signInterceptor.setPaths(paths.stream().distinct().collect(Collectors.toList()));
         return signInterceptor;

@@ -1,19 +1,20 @@
 package com.oneisall.spring.web.extend.sign.exception;
 
+import com.oneisall.spring.web.extend.i18n.CodeMessageEnum;
 import com.oneisall.spring.web.extend.i18n.I18nMessage;
-import com.oneisall.spring.web.extend.i18n.MessageException;
 import lombok.AllArgsConstructor;
 
 /**
  * @author liuzhicong
  **/
 @AllArgsConstructor
-public enum SignExceptionEnum implements MessageException {
+public enum SignExceptionEnum implements CodeMessageEnum {
 
     /** 签名校验失败 */
-    SIGN_VERIFY_FAILED(10001, "Signature verification failed."),
+    SIGN_VERIFY_FAILED(10001, "Signature verification failed.(10001)"),
     /** 签名配置异常 */
-    SIGN_SYSTEM_ERROR(10002, "Signature verification failed(setting error)."),
+    SIGN_SETTING_ERROR(10002, "Signature verification failed.(10002)"),
+
     ;
 
     private final int code;

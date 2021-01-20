@@ -1,5 +1,6 @@
 package com.oneisall.spring.web.extend.sign.handler;
 
+import com.oneisall.spring.web.extend.model.Result;
 import com.oneisall.spring.web.extend.model.StrategyMatcher;
 
 /**
@@ -9,6 +10,12 @@ import com.oneisall.spring.web.extend.model.StrategyMatcher;
  **/
 public abstract class AbstractSignHandler implements StrategyMatcher<RequestSignInfo> {
 
-    /** 验签 */
-    public abstract boolean verify(RequestSignInfo requestSignInfo);
+    /**
+     * 验签
+     *
+     * @param requestSignInfo 请求信息
+     * @return 结果
+     */
+    public abstract Result<?> verify(RequestSignInfo requestSignInfo);
+
 }

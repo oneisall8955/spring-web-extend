@@ -5,7 +5,7 @@ package com.oneisall.spring.web.extend.i18n;
  *
  * @author liuzhicong
  **/
-public interface MessageException {
+public interface CodeMessageEnum {
 
     /**
      * 获取异常code

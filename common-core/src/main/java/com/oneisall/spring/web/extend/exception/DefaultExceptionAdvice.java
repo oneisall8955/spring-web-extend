@@ -24,7 +24,7 @@ public class DefaultExceptionAdvice {
     @ExceptionHandler(BusinessException.class)
     public Result<?> handleException(BusinessException e) {
         log.error("发生业务异常", e);
-        return Result.failed(e.getMessageException());
+        return Result.failed(e.getCodeMessageEnum());
     }
 
 

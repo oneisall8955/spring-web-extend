@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @StrategyFactoryInfo("汽车")
 public class CarFactory extends BaseStrategyFactory<Car, String> {
     @Override
-    public boolean instanceNew() {
+    public boolean ofNew() {
         return false;
     }
 
