@@ -1,6 +1,6 @@
 # spring-web-extend
 
-基于 springboot 构造一些常用轮子，提供插拔式的 starter 及对应的 example。
+基于 springboot 构造一些常用轮子，提供插拔式，可配置的，可扩展的 starter 及对应的 example。
 
 ## 近期计划的轮子
 

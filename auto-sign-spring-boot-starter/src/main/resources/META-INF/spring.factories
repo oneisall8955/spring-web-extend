@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.oneisall.spring.web.extend.sign.configuration.WebConfigurer
+com.oneisall.spring.web.extend.sign.configuration.WebConfigurer,\
+com.oneisall.spring.web.extend.sign.handler.SignHandlerConfiguration
