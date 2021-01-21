@@ -110,10 +110,19 @@ public class SignSettingController {
         return foo;
     }
 
-    @SignRequired(title = "签名测试使用配置", usingProperties = true,
+    @SignRequired(title = "签名测试使用配置_param", usingProperties = true,
             uniqueName = "foo-app", signDataFrom = SignDataFrom.PARAM, signKeyFrom = SignKeyFrom.PARAM)
     @GetMapping("/verifyGetUsingProperties")
     public Object verifyGetUsingProperties(@ModelAttribute Foo foo) {
+        return foo;
+    }
+
+    @SignRequired(title = "签名测试使用配置_param_includes", usingProperties = true,
+            uniqueName = "foo-app", signDataFrom = SignDataFrom.PARAM, signKeyFrom = SignKeyFrom.PARAM,
+            includes = "name"
+    )
+    @GetMapping("/verifyGetUsingPropertiesIncludes")
+    public Object verifyGetUsingPropertiesIncludes(@ModelAttribute Foo foo) {
         return foo;
     }
 
