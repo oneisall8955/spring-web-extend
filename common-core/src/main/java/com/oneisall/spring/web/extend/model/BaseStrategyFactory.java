@@ -84,7 +84,7 @@ public class BaseStrategyFactory<S extends StrategyMatcher<T>, T> implements App
         List<S> instances = new LinkedList<>();
         for (S strategy : strategies) {
             if (strategy.match(t)) {
-                instances.add(CopyUtils.copyObject(strategy));
+                instances.add(ofInstance(strategy));
             }
         }
         return instances;
