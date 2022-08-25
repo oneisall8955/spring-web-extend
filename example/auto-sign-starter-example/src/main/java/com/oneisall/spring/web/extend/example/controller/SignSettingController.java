@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class SignSettingController {
             result.put("sign", hmac);
             result.put("json", json);
         } else {
-            HashMap<String, String> hashMap = CollectionMapUtil.newLinkedHashMapWithExpectedSize(data.size());
+            Map<String, String> hashMap = CollectionMapUtil.newLinkedHashMapWithExpectedSize(data.size());
             for (Map.Entry<String, Object> entry : data.entrySet()) {
                 Object value = entry.getValue();
                 if (value != null) {
