@@ -24,6 +24,7 @@
         <commons-io.version>2.6</commons-io.version>
         <common-text.version>1.9</common-text.version>
         <lombok.version>1.18.12</lombok.version>
+        <hutool.version>5.8.4</hutool.version>
     </properties>
 
     <!--管理所有第三方jar包版本，SpringCloud Alibaba 版本由主Pom控制-->
@@ -76,6 +77,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

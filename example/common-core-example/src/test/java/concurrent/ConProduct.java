@@ -1,6 +1,6 @@
 package concurrent;
 
-import com.oneisall.spring.web.extend.concurrent.ConQuestion;
+import com.oneisall.spring.web.extend.concurrent.ConTask;
 import lombok.*;
 
 /**
@@ -11,14 +11,14 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConProduct implements ConQuestion {
+public class ConProduct implements ConTask {
 
     private Long productId;
 
     private Long stock;
 
     @Override
-    public String questionKey() {
+    public String taskKey() {
         return productId + "";
     }
 

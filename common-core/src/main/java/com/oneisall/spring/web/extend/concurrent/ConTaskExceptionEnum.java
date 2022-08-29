@@ -1,18 +1,17 @@
 package com.oneisall.spring.web.extend.concurrent;
 
 import com.oneisall.spring.web.extend.i18n.CodeMessageEnum;
-import com.oneisall.spring.web.extend.i18n.I18nMessage;
 import lombok.AllArgsConstructor;
 
 /**
  * @author liuzhicong
  **/
 @AllArgsConstructor
-public enum ConAssistantExceptionEnum implements CodeMessageEnum {
+public enum ConTaskExceptionEnum implements CodeMessageEnum {
 
 
     /** 类型转换异常 */
-    TYPE_CAST_ERROR(20001, "class type cast failed.(10001)"),
+    TYPE_CAST_ERROR(10001, "class type cast failed.(10001)"),
 
     ;
 
@@ -26,6 +25,7 @@ public enum ConAssistantExceptionEnum implements CodeMessageEnum {
 
     @Override
     public String getMsg() {
-        return I18nMessage.getMessage("ERROR_" + this.code, this.defaultMsg);
+        return defaultMsg;
     }
+
 }
